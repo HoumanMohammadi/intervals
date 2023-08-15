@@ -71,17 +71,42 @@ class IntervalOverlapChecker {
         return true;
     }
 
+    public static int checkOverlappingOfAllIntervalsAndReturnNrOfOverlaps(Interval[] intervals) {
+        int numberOfOverlaps = 0;
+        if (intervals == null || intervals.length <= 1) {
+            return numberOfOverlaps;
+        }
+        Arrays.sort(intervals, Comparator.comparingInt(interval -> interval.start));
+
+        int overlapCount = 0;
+        int currentEnd = intervals[0].end;
+
+        // Check for overlap and update overlap count
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i].start < currentEnd) {
+                overlapCount++;
+                currentEnd = Math.min(currentEnd, intervals[i].end);
+            } else {
+                currentEnd = intervals[i].end;
+            }
+        }
+
+        return overlapCount;
+
+    }
+
 
     public static void main(String[] args) {
-        Interval intervalA = new Interval(4, 8, true, true);
-        Interval intervalB = new Interval(8, 13, true, true);
-        Interval intervalC = new Interval(10, 19, true, true);
+        Interval intervalA = new Interval(0, 10, true, true);
+        Interval intervalB = new Interval(2, 8, true, true);
+        Interval intervalC = new Interval(4, 6, true, true);
         Interval[] intervals= {intervalA,intervalB,intervalC};
 
         boolean overlap = doIntervalsOverlap(intervalA, intervalB);
         Object[] result = returnTrueAndPointIfNonEmptyOverlap(intervalA, intervalB);
         System.out.println(Arrays.toString(result));
         System.out.println(checkOverlappingOfAllIntervals(intervals));
+        System.out.println(checkOverlappingOfAllIntervalsAndReturnNrOfOverlaps(intervals));
 
         if (overlap) {
             System.out.println("Intervals overlap.");
