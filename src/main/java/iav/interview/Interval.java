@@ -60,12 +60,11 @@ class IntervalOverlapChecker {
         if (intervals == null || intervals.length <= 1) {
             return true;
         }
-
         Arrays.sort(intervals, Comparator.comparingInt(interval -> interval.start));
 
         // Check for overlap
         for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i].start < intervals[i - 1].end) {
+            if (doIntervalsOverlap(intervals[i-1],intervals[i])) {
                 return false;
             }
         }
@@ -76,10 +75,13 @@ class IntervalOverlapChecker {
     public static void main(String[] args) {
         Interval intervalA = new Interval(4, 8, true, true);
         Interval intervalB = new Interval(8, 13, true, true);
+        Interval intervalC = new Interval(10, 19, true, true);
+        Interval[] intervals= {intervalA,intervalB,intervalC};
 
         boolean overlap = doIntervalsOverlap(intervalA, intervalB);
         Object[] result = returnTrueAndPointIfNonEmptyOverlap(intervalA, intervalB);
         System.out.println(Arrays.toString(result));
+        System.out.println(checkOverlappingOfAllIntervals(intervals));
 
         if (overlap) {
             System.out.println("Intervals overlap.");
